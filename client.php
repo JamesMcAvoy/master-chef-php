@@ -16,7 +16,7 @@ if (!socket_connect($sock, '127.0.0.1', 80)) {
     die("Could not connect: [{$errorcode}] {$errormsg} \n");
 }
 echo "Connection established \n";
-$msg = "Hello";
+$msg = "{\"type\":\"bonjour\"}";
 //Send the message to the server
 if (!socket_send($sock, $msg, strlen($msg), 0)) {
     $errorcode = socket_last_error();

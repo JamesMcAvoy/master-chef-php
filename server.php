@@ -5,10 +5,14 @@ require './vendor/autoload.php';
 use React\EventLoop\Factory;
 use React\Socket\Server;
 use React\Socket\ConnectionInterface;
+use Resto\Message;
+use Resto\Database;
 
 $loop = Factory::create();
-$socket = new Server('127.0.0.1:80', $loop);
+$socket = new Server('127.0.0.1:8080', $loop);
 $client = false;
+
+Database::setDatabase();
 
 $socket->on('connection', function (ConnectionInterface $connection) use($client) {
     if(!$client) {
@@ -16,13 +20,13 @@ $socket->on('connection', function (ConnectionInterface $connection) use($client
         echo 'Client connected' . "\n";
     }
 
-    /*$connection->write("Hello " . $connection->getRemoteAddress() . "!\n");
-    $connection->write("Welcome to this amazing server!\n");
-    $connection->write("Here's a tip: don't say anything.\n");
-
-    $connection->on('data', function ($data) use ($connection) {
-        $connection->close();
-    });*/
+    /**
+     * Data control
+     */
+    $connection->on('data', function ($data)  {
+        echo $data . "\n";
+        Message::handle($data);
+    });
 
     $connection->on('close', function () {
         $client = false;

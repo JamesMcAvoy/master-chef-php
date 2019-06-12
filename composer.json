@@ -1,6 +1,7 @@
 {
     "require": {
-        "react/socket": "1.2.1"
+        "react/socket": "1.2.1",
+        "illuminate/database": "^5.8"
     },
     "autoload": {
         "psr-4": {
