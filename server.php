@@ -23,7 +23,7 @@ $socket->on('connection', function (ConnectionInterface $connection) use($client
     }
 
     //On message
-    $connection->on('data', function ($data)  {
+    $connection->on('data', function ($data) use($connection)  {
         echo 'New message: ' . $data . "\n";
         $message = json_decode($data, true);
 
@@ -31,6 +31,32 @@ $socket->on('connection', function (ConnectionInterface $connection) use($client
             //Init
             case (isset($message['type']) && $message['type'] == 'bonjour'):
                 $recipes = Recipe::all();
+                foreach($recipes as $recipe) {
+                    if($recipe->type == 'entree') $array['entrees'][] = $recipe->description;
+                    elseif($recipe->type == 'dish') $array['plats'][] = $recipe->description;
+                    elseif($recipe->type == 'dessert') $array['desserts'][] = $recipe->description;
+                }
+                $array['temps'] = 0;
+                $array['acceleration'] = 60;
+                $array['horaires'] = [[12, 15], [19, 22]];
+                $array['carres'] = [[
+                    '2'  => 5,
+                    '4'  => 5,
+                    '6'  => 3,
+                    '8'  => 2,
+                    '10' => 1
+                ],[
+                    '2'  => 5,
+                    '4'  => 5,
+                    '6'  => 2,
+                    '8'  => 3,
+                    '10' => 1
+                ]];
+
+                $connection->write(json_encode([
+                    'sauvegarde' => false,
+                    'restos' => [$array]
+                ]));
                 break;
         }
     });
