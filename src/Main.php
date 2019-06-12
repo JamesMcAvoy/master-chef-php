@@ -6,7 +6,7 @@ use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
 class Main implements MessageComponentInterface {
-    protected $client;
+    protected $client = false;
 
     public function __construct() {
         $this->client = new \SplObjectStorage;
@@ -29,6 +29,7 @@ class Main implements MessageComponentInterface {
 
     public function onClose(ConnectionInterface $conn) {
         $this->client->detach($conn);
+        $this->client = false;
 
         echo "Client has disconnected\n";
     }
