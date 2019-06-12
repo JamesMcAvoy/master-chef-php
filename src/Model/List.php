@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model
+namespace Resto\Model;
+
+use Illuminate\Database\Eloquent\Model;
 
 class List extends Model {
 
@@ -12,11 +14,11 @@ class List extends Model {
 
     public $timestamps = false;
 
-    public ingredients() {
+    public function ingredients() {
         return $this->belongsToMany('Resto\Model\Ingredient', 'ingredient_id');
     }
 
-    public recipes() {
+    public function recipes() {
         return $this->belongsToMany('Resto\Recipe', 'recipe_id');
     }
 

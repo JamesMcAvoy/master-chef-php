@@ -10,7 +10,7 @@ if (!($sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP))) {
      die("Couldn't create socket: [{$errorcode}] {$errormsg} \n");
 }
 echo "Socket created";
-if (!socket_connect($sock, '127.0.0.1', 80)) {
+if (!socket_connect($sock, '127.0.0.1', 8080)) {
     $errorcode = socket_last_error();
     $errormsg = socket_strerror($errorcode);
     die("Could not connect: [{$errorcode}] {$errormsg} \n");

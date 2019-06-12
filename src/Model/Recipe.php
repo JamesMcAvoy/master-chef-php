@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model
+namespace Resto\Model;
+
+use Illuminate\Database\Eloquent\Model;
 
 class Recipe extends Model {
 
@@ -19,7 +21,7 @@ class Recipe extends Model {
 
     public $timestamps = false;
 
-    public lists() {
+    public function lists() {
         return $this->hasMany('Resto\List', 'recipe_id');
     }
 
