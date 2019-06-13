@@ -7,6 +7,7 @@ use React\Socket\Server;
 use React\Socket\ConnectionInterface;
 use Resto\Message;
 use Resto\Database;
+use Resto\Kitchen;
 use Resto\Model\Recipe;
 
 $loop = Factory::create();
@@ -14,8 +15,9 @@ $socket = new Server('127.0.0.1:8080', $loop);
 $client = false;
 
 Database::setDatabase();
+$kitchen = new Kitchen();
 
-$socket->on('connection', function (ConnectionInterface $connection) use($client) {
+$socket->on('connection', function (ConnectionInterface $connection) use($client, $kitchen) {
     //On connection
     if(!$client) {
         $client = true;
@@ -23,7 +25,7 @@ $socket->on('connection', function (ConnectionInterface $connection) use($client
     }
 
     //On message
-    $connection->on('data', function ($data) use($connection)  {
+    $connection->on('data', function ($data) use($connection, $kitchen)  {
         echo 'New message: ' . $data . "\n";
         $message = json_decode($data, true);
 
@@ -57,6 +59,11 @@ $socket->on('connection', function (ConnectionInterface $connection) use($client
                     'sauvegarde' => false,
                     'restos' => [$array]
                 ]));
+                break;
+
+            //Command
+            case (isset($message['type']) && $message['type'] == 'commande'):
+                $kitchen->prepare($message, $connection);
                 break;
         }
     });
